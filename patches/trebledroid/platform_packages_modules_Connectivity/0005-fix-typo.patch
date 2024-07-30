@@ -1,0 +1,24 @@
+From c1142f213d16da5468dff3d1c3e1e83b0f218a58 Mon Sep 17 00:00:00 2001
+From: bibindasb <bibindasappu1@gmail.com>
+Date: Wed, 15 May 2024 12:19:13 +0000
+Subject: [PATCH 5/5] fix typo
+
+---
+ staticlibs/native/bpf_headers/include/bpf/BpfMap.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/staticlibs/native/bpf_headers/include/bpf/BpfMap.h b/staticlibs/native/bpf_headers/include/bpf/BpfMap.h
+index 2fe7af0..ed5d531 100644
+--- a/staticlibs/native/bpf_headers/include/bpf/BpfMap.h
++++ b/staticlibs/native/bpf_headers/include/bpf/BpfMap.h
+@@ -72,6 +72,7 @@ class BpfMapRO {
+             if (bpfGetFdKeySize(mMapFd) != sizeof(Key)) return false;
+             if (bpfGetFdValueSize(mMapFd) != sizeof(Value)) return false;
+         }
++        return true;
+     }
+     explicit BpfMapRO<Key, Value>(const char* pathname) {
+         mMapFd.reset(mapRetrieveRO(pathname));
+-- 
+2.34.1
+

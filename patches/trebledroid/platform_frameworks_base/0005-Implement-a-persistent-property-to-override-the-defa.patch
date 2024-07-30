@@ -1,0 +1,49 @@
+From 87bc89c90b941f0fa88ed3611c22eb58fcffd8e0 Mon Sep 17 00:00:00 2001
+From: Peter Cai <peter@typeblog.net>
+Date: Wed, 1 Jun 2022 16:56:20 -0400
+Subject: [PATCH 05/43] Implement a persistent property to override the default
+ primary camera (0)
+
+Change-Id: I49b45d00bf71d7932591b3516d49a680e1b6568b
+---
+ core/java/android/hardware/Camera.java                | 4 ++++
+ core/java/android/hardware/camera2/CameraManager.java | 8 ++++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/core/java/android/hardware/Camera.java b/core/java/android/hardware/Camera.java
+index c884e3f7..99412dac 100644
+--- a/core/java/android/hardware/Camera.java
++++ b/core/java/android/hardware/Camera.java
+@@ -476,6 +476,10 @@ public class Camera {
+      * @see #open(int)
+      */
+     public static Camera open() {
++        int altPrimaryCamera = SystemProperties.getInt("persist.sys.alt_primary_camera", -1);
++        if (altPrimaryCamera > 0) {
++            return new Camera(altPrimaryCamera);
++        }
+         int numberOfCameras = getNumberOfCameras();
+         CameraInfo cameraInfo = new CameraInfo();
+         for (int i = 0; i < numberOfCameras; i++) {
+diff --git a/core/java/android/hardware/camera2/CameraManager.java b/core/java/android/hardware/camera2/CameraManager.java
+index 60c7f3e5..53b4e7ee 100644
+--- a/core/java/android/hardware/camera2/CameraManager.java
++++ b/core/java/android/hardware/camera2/CameraManager.java
+@@ -2236,6 +2236,14 @@ public final class CameraManager {
+                             return s1.compareTo(s2);
+                         }
+                     }});
++            // HAXX: Allow overriding default primary camera (assumed to be camera 0) via property
++            // Should match with libcameraservice/common/CameraProviderManager.cpp
++            int altPrimaryCamera = SystemProperties.getInt("persist.sys.alt_primary_camera", -1);
++            if (altPrimaryCamera > 0 && altPrimaryCamera < cameraIds.length) {
++                String origPrimary = cameraIds[0];
++                cameraIds[0] = cameraIds[altPrimaryCamera];
++                cameraIds[altPrimaryCamera] = origPrimary;
++            }
+ 
+         }
+ 
+-- 
+2.34.1
+

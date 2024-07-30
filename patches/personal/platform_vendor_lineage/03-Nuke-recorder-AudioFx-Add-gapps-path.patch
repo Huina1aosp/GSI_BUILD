@@ -1,0 +1,51 @@
+From 8779cb51b72cc584c4b40b295e8b798219ff7825 Mon Sep 17 00:00:00 2001
+From: naz664 <nazimnavas145@gmail.com>
+Date: Wed, 15 May 2024 12:45:16 +0000
+Subject: [PATCH] Nuke recorder,AudioFx & Add gapps path
+
+Signed-off-by: naz664 <nazimnavas145@gmail.com>
+---
+ config/common_full.mk | 6 ------
+ config/version.mk     | 5 +++++
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/config/common_full.mk b/config/common_full.mk
+index e30f05d..1d159aa 100644
+--- a/config/common_full.mk
++++ b/config/common_full.mk
+@@ -8,7 +8,6 @@ PRODUCT_PACKAGES += \
+     Eleven \
+     Etar \
+     Profiles \
+-    Recorder \
+     Seedvault
+ 
+ ifneq ($(PRODUCT_NO_CAMERA),true)
+@@ -16,11 +15,6 @@ PRODUCT_PACKAGES += \
+     Aperture
+ endif
+ 
+-ifneq ($(TARGET_EXCLUDES_AUDIOFX),true)
+-PRODUCT_PACKAGES += \
+-    AudioFX
+-endif
+-
+ # Extra cmdline tools
+ PRODUCT_PACKAGES += \
+     unrar \
+diff --git a/config/version.mk b/config/version.mk
+index 5f07efb..aaf2524 100644
+--- a/config/version.mk
++++ b/config/version.mk
+@@ -9,3 +9,8 @@ LINEAGE_VERSION := crDroidAndroid-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MIN
+ 
+ # Display version
+ LINEAGE_DISPLAY_VERSION := crDroidAndroid-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR)-$(LINEAGE_BUILD)-v$(CR_VERSION)
++
++ifeq ($(WITH_GAPPS), true)
++    $(call inherit-product, vendor/gapps/arm64/arm64-vendor.mk)
++    LINEAGE_BUILD_ZIP_TYPE := GAPPS
++endif
+-- 
+2.34.1
+

@@ -1,0 +1,31 @@
+From 3865d51c203ffd3138a33b7ecdd34e16a9d50d0e Mon Sep 17 00:00:00 2001
+From: naz664 <nazimnavas145@gmail.com>
+Date: Mon, 26 Dec 2022 11:54:04 +0000
+Subject: [PATCH 3/3] remove su from no-su builds
+
+---
+ target/product/base_system.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/target/product/base_system.mk b/target/product/base_system.mk
+index 75e2703..eb00bae 100644
+--- a/target/product/base_system.mk
++++ b/target/product/base_system.mk
+@@ -444,10 +444,10 @@ PRODUCT_PACKAGES_DEBUG := \
+     unwind_reg_info \
+     unwind_symbols \
+ 
+-ifeq ($(LINEAGE_BUILD),)
+-PRODUCT_PACKAGES_DEBUG += \
+-    su
+-endif
++#ifeq ($(LINEAGE_BUILD),)
++#PRODUCT_PACKAGES_DEBUG += \
++#    su
++#endif
+ 
+ # The set of packages whose code can be loaded by the system server.
+ PRODUCT_SYSTEM_SERVER_APPS += \
+-- 
+2.34.1
+
